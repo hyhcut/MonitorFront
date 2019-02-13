@@ -3,11 +3,14 @@ import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
+import Axios from 'axios';
 
 Vue.config.productionTip = false
 
 const $cookies = require('vue-cookies')
 Vue.use($cookies)
+Axios.defaults.baseURL = 'http://localhost:5000'
+Vue.prototype.$ajax = Axios
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

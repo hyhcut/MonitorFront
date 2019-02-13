@@ -6,15 +6,15 @@
             </el-col>
         </el-row>
         <el-row type="flex" justify="center"> 
-            <el-col :span="8">
-                <el-form :model="login" label-position="right" label-width="80px">
-                    <el-form-item label="用户名">
-                        <el-input v-model="login.username" placeholder="用户名"></el-input>
+            <el-col :span="4">
+                <el-form :model="login_form" ref="login_form" :rules="rules">
+                    <el-form-item prop="username">
+                        <el-input v-model="login_form.username" placeholder="用户名"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码">
-                        <el-input v-model="login.password" placeholder="密码"></el-input>
+                    <el-form-item prop="password">
+                        <el-input v-model="login_form.password" placeholder="密码" type="password"></el-input>
                     </el-form-item>
-                    <el-button type="primary">登录</el-button>
+                    <el-button class="btn-login" type="primary" @click="login('login_form')">登录</el-button>
                 </el-form>
             </el-col>
         </el-row>
@@ -26,17 +26,59 @@ export default {
     name: 'login',
   data(){
     return{
-      login:{
+      login_form:{
         username: '',
         password: ''
+      },
+      rules:{
+          username: [
+              { required: true, message: '用户名不能为空', trigger: 'blur'}
+          ],
+          password:[
+              { required: true, message: '密码不能为空', trigger: 'blur'}
+          ]
       }
     }
   },
   methods:{
+      login(form_name){
+          this.$refs[form_name].validate((valid) => {
+              if (valid) {
+                  this.$ajax.post('/login', this.login_form)
+                  .then((res) => {
+                      if (res.data.code === 200) {
+                          this.$cookies.set("status", "logined", 30 * 60);
+                          this.$cookies.set("power", res.data.data.power, 30 * 60);
+                          let redirect = decodeURIComponent(
+                              this.$route.query.redirect || "/home"
+                          );
+                          this.$notify.success({
+                              title: '登陆成功',
+                              message: '欢迎使用监控者系统',
+                              duration: 1500
+                          })
+                          this.$router.push({path: redirect});
+                      } else {
+                          this.$notify.error({
+                              title: '登陆失败',
+                              message: res.data.data,
+                              duration: 0
+                          })
+                      }
+                  }).catch((err) => {
+                      console.log(err);
+                  });
+              } else {
+                  return false;
+              }
+          })
+      }
   }
 }
 </script>
 
 <style>
-
+.btn-login{
+    width: 100%
+}
 </style>
