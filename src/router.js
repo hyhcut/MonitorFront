@@ -42,6 +42,9 @@ export default new Router({
       path: '/admin',
       name: 'admin',
       component: Admin,
+      meta:{
+        requiresAuth:true
+      },
       children:[
         {
           path: '/user',
