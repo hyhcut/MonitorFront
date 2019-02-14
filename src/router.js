@@ -5,6 +5,7 @@ import Login from './views/Login.vue'
 import Server from './views/front/Server.vue'
 import Group from './views/front/Group.vue'
 import Monitor from './views/front/Monitor.vue'
+import Manual from './views/front/Manual.vue'
 import User from './views/admin/User.vue'
 import Admin from './views/Admin.vue'
 
@@ -31,6 +32,10 @@ export default new Router({
           path: 'monitor',
           component: Monitor
         },
+        {
+          path: 'manual',
+          component: Manual
+        }
       ]
     },
     {

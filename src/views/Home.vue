@@ -63,6 +63,11 @@ export default {
           url: '/monitor',
           icon: 'el-icon-view',
           label: '监控'
+        },
+        {
+          url: '/manual',
+          icon: 'el-icon-service',
+          label: '手动'
         }
       ],
       power: 0

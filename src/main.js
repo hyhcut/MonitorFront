@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
     if (router.app.$cookies.get("status") !== "logined") {
       next({
         path: '/login',
-        query: { redirect: to.fullPath } // 把要跳转的地址作为参数传到下一步
+        query: { redirect: "/" } // 把要跳转的地址作为参数传到下一步
       })
     } else {
       next()
