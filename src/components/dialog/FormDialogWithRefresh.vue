@@ -20,7 +20,7 @@ export default {
     components:{
         'm-form': BaseForm
     },
-    inject:['refresh'],
+    inject:['submit', 'submit_callback'],
     methods:{
         init_form(){
             for (let unit of this.form.unit_list) {
@@ -35,15 +35,6 @@ export default {
                     });
                 }
             } 
-        },
-        submit(){
-            this.$refs.form.submit(this.submit_callback)
-        },
-        submit_callback(flag){
-            if (flag) {
-                this.dialog.switch = false;
-                this.refresh();
-            }
         },
         reset(){
             this.$refs.form.reset();

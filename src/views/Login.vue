@@ -66,7 +66,11 @@ export default {
                           })
                       }
                   }).catch((err) => {
-                      console.log(err);
+                      this.$notify.error({
+                            title: '连接服务器失败',
+                            message: "请检查网络配置或联系管理员",
+                            duration: 0
+                        })
                   });
               } else {
                   return false;

@@ -7,11 +7,11 @@
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
-                    <edit-dialog :dialog="edit_dialog" :form="edit_form" ref="edit_dialog"></edit-dialog>
                     <el-button type="danger" @click="handleDelete(scope.$index, scope.row, dataList)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <edit-dialog :dialog="edit_dialog" :form="edit_form" ref="edit_dialog"></edit-dialog>
     </div>
 </template>
 
@@ -51,6 +51,7 @@ export default {
                 label_position: 'right',
                 label_width: '80px',
                 url: '/user/update',
+                sync: false,
                 unit_list:[
                     {
                         name: 'username',
@@ -98,6 +99,7 @@ export default {
                         type: 2,
                         placeholder: '身份权限',
                         option_url: '/power/list',
+                        sync: false,
                         rules:[
                             { required: true, message: '请设置身份权限', trigger: ['blur', 'change'] }
                         ]
@@ -116,7 +118,7 @@ export default {
     },
     methods:{
         handleDelete(index, row, data_list){
-            this.$confirm('确定要删除用户' + row.username + '吗?', '删除',
+            this.$confirm('确定要删除用户 ' + row.username + ' 吗?', '删除',
             {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -125,13 +127,11 @@ export default {
                 this.$ajax.post('/user/delete', { id: row.id })
                 .then((res) => {
                     if (res.data.code === 200){
+                        data_list.splice(index, 1);
                         this.$notify.success({
                             title: '删除成功',
-                            message: '用户' + row.username + '已删除',
-                            duration: 1500,
-                            onClose(){
-                                data_list.splice(index, 1);
-                            }
+                            message: '用户 ' + row.username + ' 已删除',
+                            duration: 1500
                         })
                     } else {
                         this.$notify.error({

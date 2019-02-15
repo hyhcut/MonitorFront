@@ -90,7 +90,9 @@ export default {
     },
     provide(){
         return{
-            refresh: this.get_user_list
+            // refresh: this.get_user_list,
+            submit: this.submit,
+            submit_callback: this.submit_callback
         }
     },
     methods:{
@@ -103,7 +105,27 @@ export default {
             }).catch((err) => {
                 console.log(err);
             });
-        }
+        },
+        submit(){
+            this.$refs.add_dialog.$refs.form.submit(this.submit_callback);
+        },
+        submit_callback(data){
+            if (data.code === 200) {
+                this.$notify.success({
+                    title: '操作成功',
+                    message: data.data,
+                    duration: 1500
+                })
+                this.add_dialog.switch = false;
+                this.get_user_list();
+            } else {
+                this.$notify.error({
+                    title: '操作失败',
+                    message: data.data,
+                    duration: 1500
+                })
+            }
+        },
     },
     mounted(){
         this.get_user_list();
