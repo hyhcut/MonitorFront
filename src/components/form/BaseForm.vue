@@ -43,6 +43,8 @@ export default {
                     }).catch((err) => {
                         callback(err);
                     });
+                } else {
+                    callback(false);
                 }
             });
         },

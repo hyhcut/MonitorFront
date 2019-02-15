@@ -111,15 +111,17 @@ export default {
             this.$refs.manual_form.submit(this.submit_callback);
         },
         submit_callback(data){
-            if (data.code === 200) {
-                this.monitor_result = data.data;
-                this.monitor_dialog.switch = true;
-            } else {
-                this.$notify.error({
-                    title: '监控失败',
-                    message: data.data,
-                    duration: 0
-                })
+            if(data){
+                if (data.code === 200) {
+                    this.monitor_result = data.data;
+                    this.monitor_dialog.switch = true;
+                } else {
+                    this.$notify.error({
+                        title: '监控失败',
+                        message: data.data,
+                        duration: 0
+                    })
+                }
             }
             this.loading = false;
         },
