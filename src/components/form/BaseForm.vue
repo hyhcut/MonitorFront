@@ -20,20 +20,6 @@ export default {
         }
     },
     methods:{
-        init_form(){
-            for (let unit of this.form.unit_list) {
-                if (unit.type === 2) {
-                    this.$ajax.post(unit.option_url)
-                    .then((res) => {
-                        if (res.data.code === 200){
-                            unit.option_list = res.data.data;
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                }
-            } 
-        },
         submit(callback){
             this.$refs[this.form.name].validate((valid) => {
                 if (valid) {
@@ -51,9 +37,6 @@ export default {
         reset(){
             this.$refs[this.form.name].resetFields();
         }
-    },
-    mounted(){
-        this.init_form();
     }
 }
 </script>

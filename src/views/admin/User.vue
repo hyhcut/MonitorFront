@@ -3,43 +3,48 @@
         <el-row type="flex" justify="end">
             <el-col :span="4">
                 <el-button type="primary" @click="add_dialog.switch = true" round>添加</el-button>
-                <add-dialog :dialog="add_dialog" :form="add_form" ref="add_dialog"></add-dialog>
             </el-col>
         </el-row>
-        <user-list :data-list="data_list" :col-list="col_list"></user-list>
+        <el-row>
+          <el-col>
+              <user-list :table="table"></user-list>
+          </el-col>
+        </el-row>
+        <add-dialog :ref="add_dialog.name" :dialog="add_dialog" :form="add_form"></add-dialog>
     </div>
 </template>
 
 <script>
-import UserList from '@/components/UserList.vue'
+import ListWithOperation from '@/components/list/ListWithOperation.vue'
 import FormDialogWithRefresh from '@/components/dialog/FormDialogWithRefresh.vue'
 
 export default {
     components:{
-        'user-list': UserList,
+        'user-list': ListWithOperation,
         'add-dialog': FormDialogWithRefresh
     },
     data(){
         return{
-            data_list:[],
-            col_list:[
-                {
-                    name: 'username',
-                    label: '用户名',
-                    show: true
-                },
-                {
-                    name: 'power',
-                    label: '身份权限',
-                    show: true
-                },
-                {
-                    name: 'last_time',
-                    label: '最后登陆时间',
-                    show: true
-                }
-            ],
+            table:{
+                data_url: '/user/list',
+                data: [],
+                col_list:[
+                    {
+                        name: 'username',
+                        label: '用户名',
+                    },
+                    {
+                        name: 'power',
+                        label: '身份权限',
+                    },
+                    {
+                        name: 'last_time',
+                        label: '最后登陆时间',
+                    }
+                ]
+            },
             add_dialog:{
+                name: 'add_dialog',
                 title: '新增人员',
                 switch: false
             },
@@ -88,26 +93,9 @@ export default {
             }
         }
     },
-    provide(){
-        return{
-            // refresh: this.get_user_list,
-            submit: this.submit,
-            submit_callback: this.submit_callback
-        }
-    },
     methods:{
-        get_user_list(){
-            this.$ajax.post('/user/list')
-            .then((res) => {
-                if (res.data.code === 200) {
-                    this.data_list = res.data.data;
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
-        },
-        submit(){
-            this.$refs.add_dialog.$refs.form.submit(this.submit_callback);
+        submit(form_name){
+            this.$refs[form_name].$refs.form.submit(this.submit_callback);
         },
         submit_callback(data){
             if (data.code === 200) {
@@ -126,9 +114,32 @@ export default {
                 })
             }
         },
+        edit(id){
+            this.$ajax.post('/user/get', {id: id})
+            .then((res) => {
+                if (res.data.code === 200){
+                    for (const key in res.data.data) {
+                        if (this.edit_form.data.hasOwnProperty(key)) {
+                            this.edit_form.data[key] = res.data.data[key];
+                        }
+                    }
+                    this.edit_dialog.switch = true;
+                }
+            }).catch((err) => {
+                
+            });
+        },
+        handleDelete(index, row, table_data){
+            console.log(row);
+        }
     },
-    mounted(){
-        this.get_user_list();
+    provide(){
+        return{
+            submit: this.submit,
+            submit_callback: this.submit_callback,
+            edit: this.edit,
+            handleDelete: this.handleDelete
+        }
     }
 }
 </script>

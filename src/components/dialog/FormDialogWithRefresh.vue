@@ -2,7 +2,7 @@
     <el-dialog :title="dialog.title" :visible.sync="dialog.switch" @close="handleClose" append-to-body>
         <m-form :form="form" ref="form"></m-form>
         <span slot="footer">
-            <el-button type="primary" @click="submit">确定</el-button>
+            <el-button type="primary" @click="submit(dialog.name)">确定</el-button>
             <el-button type="warning" @click="reset">重置</el-button>
             <el-button @click="close_dialog">关闭</el-button>
         </span>
