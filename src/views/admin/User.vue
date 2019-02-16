@@ -105,7 +105,7 @@ export default {
                         placeholder: '密码',
                         input_type: 'password',
                         rules:[
-                            { required: true, message: '密码不能为空', trigger: 'blur' },
+                            { required: true, message: '请再次输入密码', trigger: 'blur' },
                             { validator: add_confirm_password, trigger: 'blur' }
                         ]
                     },
@@ -172,7 +172,7 @@ export default {
                         name: 'confirm_password',
                         label: '再次输入',
                         type: 1,
-                        placeholder: '新密码',
+                        placeholder: '再次输入新密码',
                         input_type: 'password',
                         rules:[
                             { validator: edit_confirm_password, trigger: 'blur' }
@@ -235,7 +235,11 @@ export default {
                     this.edit_dialog.switch = true;
                 }
             }).catch((err) => {
-                
+                this.$notify.error({
+                    title: '操作失败',
+                    message: '请检查网络设置或联系服务器管理员',
+                    duration: 1500
+                })
             });
         },
         handleDelete(index, row, table_data){
@@ -262,11 +266,13 @@ export default {
                         })
                     }
                 }).catch((err) => {
-                    console.log(err);
+                    this.$notify.error({
+                        title: '操作失败',
+                        message: '请检查网络设置或联系服务器管理员',
+                        duration: 1500
+                    })
                 });
-            }).catch(() => {
-
-            });
+            })
         }
     },
     provide(){
