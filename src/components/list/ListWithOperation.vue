@@ -26,7 +26,6 @@ export default {
             .then((res) => {
                 if (res.data.code === 200){
                     this.table.data = res.data.data;
-                    console.log(this.table.data);
                 } else {
                     this.$notify.error({
                         title: '获取列表数据失败',

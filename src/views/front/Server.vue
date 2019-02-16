@@ -5,22 +5,24 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <server-list :table="table"></server-list>
+                <server-list :table="table" ref="server_list"></server-list>
             </el-col>
         </el-row>
         <add-dialog :ref="add_dialog.name" :dialog="add_dialog" :form="add_form"></add-dialog>
-        <add-dialog :ref="edit_dialog.name" :dialog="edit_dialog" :form="edit_form"></add-dialog>
+        <edit-dialog :ref="edit_dialog.name" :dialog="edit_dialog" :form="edit_form"></edit-dialog>
     </div>
 </template>
 
 <script>
 import ListWithOperation from '@/components/list/ListWithOperation.vue'
-import FormDialogWithRefresh from '@/components/dialog/FormDialogWithRefresh.vue'
+import AddFormDialog from '@/components/dialog/AddFormDialog.vue'
+import EditFormDialog from '@/components/dialog/EditFormDialog.vue'
 
 export default {
     components:{
         'server-list': ListWithOperation,
-        'add-dialog': FormDialogWithRefresh
+        'add-dialog': AddFormDialog,
+        'edit-dialog': EditFormDialog
     },
     data(){
         let add_confirm_password = (rule, value, callback) => {
@@ -164,13 +166,12 @@ export default {
                 url: '/server/update',
                 sync: false,
                 data:{
+                    id: '',
                     type_id: '',
                     name: '',
                     address: '',
                     username: '',
-                    old_password: '',
-                    new_password: '',
-                    confirm_password: ''
+                    password: ''
                 },
                 unit_list:[
                     {
@@ -216,33 +217,13 @@ export default {
                         ]
                     },
                     {
-                        name: 'old_password',
+                        name: 'password',
                         label: '密码',
                         type: 1,
                         placeholder: '密码',
                         input_type: 'password',
                         rules:[
                             { required: true, message: '密码不能为空', trigger: 'blur' }
-                        ]
-                    },
-                    {
-                        name: 'new_password',
-                        label: '密码',
-                        type: 1,
-                        placeholder: '密码',
-                        input_type: 'password',
-                        rules:[
-                            
-                        ]
-                    },
-                    {
-                        name: 'confirm_password',
-                        label: '再次输入',
-                        type: 1,
-                        placeholder: '密码',
-                        input_type: 'password',
-                        rules:[
-                            { validator: edit_confirm_password, trigger: 'blur' }
                         ]
                     }
                 ]
@@ -261,6 +242,8 @@ export default {
                     duration: 1500
                 })
                 this.add_dialog.switch = false;
+                this.edit_dialog.switch = false;
+                this.$refs.server_list.get_data();
             } else {
                 this.$notify.error({
                     title: '操作失败',
@@ -285,7 +268,34 @@ export default {
             });
         },
         handleDelete(index, row, table_data){
-            console.log(row);
+            this.$confirm('确定要删除服务器 ' + row.name + ' 吗?', '删除',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'error'
+            }).then(() => {
+                this.$ajax.post('/server/delete', { id: row.id })
+                .then((res) => {
+                    if (res.data.code === 200){
+                        table_data.splice(index, 1);
+                        this.$notify.success({
+                            title: '删除成功',
+                            message: '服务器 ' + row.name + ' 已删除',
+                            duration: 1500
+                        })
+                    } else {
+                        this.$notify.error({
+                            title: '删除失败',
+                            message: res.data.data,
+                            duration: 0
+                        })
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }).catch(() => {
+
+            });
         }
     },
     provide(){
