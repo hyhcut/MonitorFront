@@ -5,7 +5,7 @@
                 <h1>Monitor</h1>
             </el-col>
         </el-row>
-        <el-row type="flex" justify="center"> 
+        <el-row type="flex" justify="center" v-loading="loading"> 
             <el-col :span="4">
                 <el-form :model="login_form" ref="login_form" :rules="rules">
                     <el-form-item prop="username">
@@ -30,6 +30,7 @@ export default {
         username: '',
         password: ''
       },
+      loading: false,
       rules:{
           username: [
               { required: true, message: '用户名不能为空', trigger: 'blur'}
@@ -42,6 +43,7 @@ export default {
   },
   methods:{
       login(form_name){
+          this.loading = true;
           this.$refs[form_name].validate((valid) => {
               if (valid) {
                   this.$ajax.post('/login', this.login_form)
@@ -64,15 +66,18 @@ export default {
                               message: res.data.data,
                               duration: 0
                           })
+                          this.loading = false;
                       }
                   }).catch((err) => {
-                      this.$notify.error({
+                        this.$notify.error({
                             title: '连接服务器失败',
                             message: "请检查网络配置或联系管理员",
                             duration: 0
                         })
+                        this.loading = false;
                   });
               } else {
+                  this.loading = false;
                   return false;
               }
           })
