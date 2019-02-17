@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
-import Server from './views/front/Server.vue'
+import ServerIndex from './views/front/server/Index.vue'
+import ServerList from './views/front/server/List.vue'
+import ServerView from './views/front/server/View.vue'
 import Group from './views/front/Group.vue'
 import Monitor from './views/front/Monitor.vue'
 import Manual from './views/front/Manual.vue'
@@ -22,7 +24,17 @@ export default new Router({
       children:[
         {
           path: 'server',
-          component: Server
+          component: ServerIndex,
+          children:[
+            {
+              path: '',
+              component: ServerList
+            },
+            {
+              path: 'view/:id',
+              component: ServerView
+            }
+          ]
         },
         {
           path: 'group',

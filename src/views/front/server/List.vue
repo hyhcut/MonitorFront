@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import ListWithOperation from '@/components/list/ListWithOperation.vue'
+import ListWithOperationAndView from '@/components/list/ListWithOperationAndView.vue'
 import AddFormDialog from '@/components/dialog/AddFormDialog.vue'
 import EditFormDialog from '@/components/dialog/EditFormDialog.vue'
 
 export default {
     components:{
-        'server-list': ListWithOperation,
+        'server-list': ListWithOperationAndView,
         'add-dialog': AddFormDialog,
         'edit-dialog': EditFormDialog
     },
@@ -252,6 +252,9 @@ export default {
                 })
             }
         },
+        view(id){
+            this.$router.push('server/view/' + id);
+        },
         edit(id){
             this.$ajax.post('/server/get', {id: id})
             .then((res) => {
@@ -302,6 +305,7 @@ export default {
         return{
             submit: this.submit,
             submit_callback: this.submit_callback,
+            view: this.view,
             edit: this.edit,
             handleDelete: this.handleDelete
         }

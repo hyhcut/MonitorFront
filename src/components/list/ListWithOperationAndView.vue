@@ -6,8 +6,9 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
-                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row, table.data)">删除</el-button>
+                    <el-button size="mini" @click="view(scope.row.id)">查看</el-button>
+                    <el-button type="primary" @click="edit(scope.row.id)" size="mini">编辑</el-button>
+                    <el-button type="danger" @click="handleDelete(scope.$index, scope.row, table.data)" size="mini">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -24,7 +25,7 @@ export default {
             loading: false
         }
     },
-    inject:['edit', 'handleDelete'],
+    inject:['view', 'edit', 'handleDelete'],
     methods:{
         get_data(){
             this.loading = true;

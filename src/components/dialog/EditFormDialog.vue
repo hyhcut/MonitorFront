@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="dialog.title" :visible.sync="dialog.switch" @close="handleClose" append-to-body>
+    <el-dialog :title="dialog.title" :visible.sync="dialog.switch" append-to-body>
         <m-form :form="form" ref="form"></m-form>
         <span slot="footer">
             <el-button type="primary" @click="submit(dialog.name)">确定</el-button>
