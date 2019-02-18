@@ -5,12 +5,29 @@
                 <el-row>
                     <el-col :span="12">
                         <el-card shadow="hover">
-
+                            <div slot="header" class="clearfix">
+                                <span>基本信息</span>
+                            </div>
+                            <h1>类型: {{ server.type }}</h1>
+                            <h1>名称: {{ server.name }}</h1>
+                            <h1>地址: {{ server.address }}</h1>
                         </el-card>
                     </el-col>
                     <el-col :span="12">
                         <el-card shadow="hover">
-                            <monitor-result :result="result"></monitor-result>
+                            <div slot="header" class="clearfix">
+                                <span>性能监控</span>
+                            </div>
+                            <monitor-result :info-list="result.info_list"></monitor-result>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-card shadow="hover">
+                            <div slot="header" class="clearfix">
+                                <span>未完待续</span>
+                            </div>
                         </el-card>
                     </el-col>
                 </el-row>
