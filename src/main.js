@@ -10,8 +10,8 @@ Vue.config.productionTip = false
 
 const $cookies = require('vue-cookies')
 Vue.use($cookies)
-Axios.defaults.baseURL = 'http://192.168.40.108:5000'
-// Axios.defaults.baseURL = 'http://localhost:5000'
+// Axios.defaults.baseURL = 'http://192.168.40.108:5000'
+Axios.defaults.baseURL = 'http://localhost:5000'
 Vue.prototype.$ajax = Axios
 Vue.prototype.$form = FormFunction
 
