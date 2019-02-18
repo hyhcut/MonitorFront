@@ -14,9 +14,10 @@
                         </el-card>
                     </el-col>
                     <el-col :span="12">
-                        <el-card shadow="hover">
+                        <el-card shadow="hover" v-loading="base_monitor_loading">
                             <div slot="header" class="clearfix">
-                                <span>性能监控</span>
+                                    <span>性能监控</span>
+                                    <el-button type="text" @click="init_base_monitor" icon="el-icon-refresh"></el-button>
                             </div>
                             <monitor-result :info-list="result.info_list"></monitor-result>
                         </el-card>
@@ -47,7 +48,8 @@ export default {
     data(){
         return{
             result:{},
-            server:{}
+            server:{},
+            base_monitor_loading: true
         }
     },
     methods:{
@@ -73,6 +75,7 @@ export default {
             });
         },
         init_base_monitor(){
+            this.base_monitor_loading = true;
             this.$ajax.post('/server/view/monitor', this.server)
             .then((res) => {
                 if (res.data.code === 200){
@@ -84,12 +87,14 @@ export default {
                         duration: 0
                     })
                 }
+                this.base_monitor_loading = false;
             }).catch((err) => {
                 this.$notify.error({
                     title: '获取监控数据失败',
                     message: '请检查网络设置或联系管理员',
                     duration: 0
                 })
+                this.base_monitor_loading = false;
             });
         }
     },
